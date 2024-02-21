@@ -6,7 +6,8 @@ public class Expense {
     public int ExpenseId { get; set; }
     
     [Required]
-    public string Type { get; set; }  = null!;
+    public ExpenseTypeId ExpenseTypeId { get; set; }
+    public ExpenseType ExpenseType { get; set; } = null!;
     
     [Required]
     [MaxLength(50)]
