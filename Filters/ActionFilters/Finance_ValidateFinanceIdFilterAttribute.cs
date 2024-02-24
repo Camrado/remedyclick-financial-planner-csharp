@@ -1,15 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using financial_planner.Database;
+using financial_planner.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace financial_planner.Filters.ActionFilters;
 
 public class Finance_ValidateFinanceIdFilterAttribute: ActionFilterAttribute {
-	private readonly ApplicationDbContext db;
+	private readonly ApplicationDbContext _db;
 
 	public Finance_ValidateFinanceIdFilterAttribute(ApplicationDbContext db) {
-		this.db = db;
+		this._db = db;
 	}
 
 	public override void OnActionExecuting(ActionExecutingContext context) {
@@ -22,9 +22,9 @@ public class Finance_ValidateFinanceIdFilterAttribute: ActionFilterAttribute {
 				var problemDetails = new ValidationProblemDetails(context.ModelState);
 				context.Result = new BadRequestObjectResult(problemDetails); // executes IActionResult 
 			} else {
-				var finance = db.Finances.Find(financeId);
+				var finance = _db.Finances.Where(f => f.FinanceId == financeId);
 
-				if (finance is null) {
+				if (!finance.Any()) {
 					context.ModelState.AddModelError("FinanceId", $"Finance with ID '{financeId}' does not exist.");
 					var problemDetails = new ValidationProblemDetails(context.ModelState);
 					context.Result = new BadRequestObjectResult(problemDetails); // executes IActionResult

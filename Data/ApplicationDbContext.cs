@@ -1,7 +1,7 @@
 ﻿using financial_planner.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace financial_planner.Database;
+namespace financial_planner.Data;
 
 public class ApplicationDbContext: DbContext {
     public ApplicationDbContext(DbContextOptions options) : base(options) {
