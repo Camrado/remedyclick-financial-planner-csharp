@@ -15,7 +15,7 @@ public class Finance_ValidateUpdateFinanceAttribute: ActionFilterAttribute {
     public override void OnActionExecuting(ActionExecutingContext context) {
         base.OnActionExecuting(context);
 
-        var id = context.ActionArguments["id"] as int?;
+        var id = context.ActionArguments["financeId"] as int?;
         var finance = context.ActionArguments["finance"] as Finance;
 
         if (id.HasValue && finance is not null && finance.FinanceId != id) {

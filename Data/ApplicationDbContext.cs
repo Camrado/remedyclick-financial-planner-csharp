@@ -31,6 +31,8 @@ public class ApplicationDbContext: DbContext {
             revenue
                 .Property(r => r.Amount)
                 .HasConversion<double>();
+
+            // revenue.Ignore(r => r.Finance);
             
             revenue.HasData(
                 new Revenue() { RevenueId = 1, Amount = 1500, Description = "Client A", FinanceId = 1 },

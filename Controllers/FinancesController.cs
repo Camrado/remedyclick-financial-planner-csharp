@@ -10,22 +10,22 @@ namespace financial_planner.Controllers;
 [ApiController]
 [Route("api/v{v:apiVersion}/[controller]")]
 public class FinancesController: ControllerBase {
-    private readonly ApplicationDbContext db;
+    private readonly ApplicationDbContext _db;
 
     public FinancesController(ApplicationDbContext db) {
-        this.db = db;
+        this._db = db;
     }
 
     [HttpGet]
     public IActionResult GetFinances() {
-        return Ok(db.Finances.ProjectFinanceData());
+        return Ok(_db.Finances.ProjectFinanceData());
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{financeId}")]
     [TypeFilter(typeof(Finance_ValidateFinanceIdFilterAttribute))]
     // TypeFilter instantiates TypeFilterAttribute - A filter that creates another filter of type ImplementationType,
     // retrieving missing constructor arguments from dependency injection if available there.
-    public IActionResult GetFinanceById(int id) {
+    public IActionResult GetFinanceById(int financeId) {
         var finance = HttpContext.Items["finance"] as IQueryable<Finance>;
         return Ok(finance.ProjectFinanceData().First());
     }
@@ -33,36 +33,36 @@ public class FinancesController: ControllerBase {
     [HttpPost]
     [TypeFilter(typeof(Finance_ValidateReqBodyFilterAttribute))]
     public IActionResult CreateFinance([FromBody] Finance finance) {
-        db.Add(finance);
-        db.SaveChanges();
+        _db.Add(finance);
+        _db.SaveChanges();
 
         return CreatedAtAction(nameof(GetFinanceById),
             new { id = finance.FinanceId },
             finance);
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("{financeId}")]
     [TypeFilter(typeof(Finance_ValidateFinanceIdFilterAttribute))]
     [TypeFilter(typeof(Finance_ValidateUpdateFinanceAttribute))]
     [TypeFilter(typeof(Finance_ValidateReqBodyFilterAttribute))]
-    public IActionResult UpdateFinance(int id, [FromBody] Finance finance) {
+    public IActionResult UpdateFinance(int financeId, [FromBody] Finance finance) {
         var financeToUpdate = (HttpContext.Items["finance"] as IQueryable<Finance>)?.First();
 
         financeToUpdate.Year = finance.Year;
         financeToUpdate.Month = finance.Month;
 
-        db.SaveChanges();
+        _db.SaveChanges();
 
         return Ok(financeToUpdate);
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{financeId}")]
     [TypeFilter(typeof(Finance_ValidateFinanceIdFilterAttribute))]
-    public IActionResult DeleteFinance(int id) {
+    public IActionResult DeleteFinance(int financeId) {
         var financeToDelete = (HttpContext.Items["finance"] as IQueryable<Finance>)?.First();
         
-        db.Finances.Remove(financeToDelete);
-        db.SaveChanges();
+        _db.Finances.Remove(financeToDelete);
+        _db.SaveChanges();
 
         return Ok(financeToDelete);
     }
