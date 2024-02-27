@@ -32,8 +32,6 @@ public class ApplicationDbContext: DbContext {
                 .Property(r => r.Amount)
                 .HasConversion<double>();
 
-            // revenue.Ignore(r => r.Finance);
-            
             revenue.HasData(
                 new Revenue() { RevenueId = 1, Amount = 1500, Description = "Client A", FinanceId = 1 },
                 new Revenue() { RevenueId = 2, Amount = 500, Description = "Client B", FinanceId = 1 },
@@ -41,7 +39,7 @@ public class ApplicationDbContext: DbContext {
                 new Revenue() { RevenueId = 4, Amount = 2500, Description = "Client A", FinanceId = 3 }
             );
         });
-        
+
         modelBuilder.Entity<Expense>(expense => {
             expense
                 .Property(e => e.Amount)

@@ -12,7 +12,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => {
 });
 
 // Controllers
-builder.Services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+builder.Services
+    .AddControllers(options => options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true)
+    .AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 // API Documentation
 builder.Services.AddEndpointsApiExplorer();

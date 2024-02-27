@@ -227,13 +227,11 @@ namespace financial_planner.Migrations
 
             modelBuilder.Entity("financial_planner.Models.Revenue", b =>
                 {
-                    b.HasOne("financial_planner.Models.Finance", "Finance")
+                    b.HasOne("financial_planner.Models.Finance", null)
                         .WithMany("Revenues")
                         .HasForeignKey("FinanceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Finance");
                 });
 
             modelBuilder.Entity("financial_planner.Models.ExpenseType", b =>

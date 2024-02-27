@@ -22,10 +22,11 @@ public class Revenue_ValidateRevenueIdFilterAttribute: ActionFilterAttribute {
 				var problemDetails = new ValidationProblemDetails(context.ModelState);
 				context.Result = new BadRequestObjectResult(problemDetails); // executes IActionResult 
 			} else {
-				var revenue = _db.Revenues.Where(f => f.RevenueId == revenueId);
+				var financeId = context.ActionArguments["financeId"] as int?;
+				var revenue = _db.Revenues.Where(f => f.RevenueId == revenueId && f.FinanceId == financeId);
 
 				if (!revenue.Any()) {
-					context.ModelState.AddModelError("RevenueId", $"Revenue with ID '{revenueId}' does not exist.");
+					context.ModelState.AddModelError("RevenueId", $"Revenue with ID '{revenueId}' for Finance with ID '{financeId}' does not exist.");
 					var problemDetails = new ValidationProblemDetails(context.ModelState);
 					context.Result = new BadRequestObjectResult(problemDetails); // executes IActionResult
 				}
