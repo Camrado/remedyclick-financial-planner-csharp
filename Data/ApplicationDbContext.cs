@@ -8,6 +8,7 @@ public class ApplicationDbContext: DbContext {
     }
     
     public DbSet<Expense>? Expenses { get; set; }
+    public DbSet<ExpenseType>? ExpenseTypes { get; set; }
     public DbSet<Revenue>? Revenues { get; set; }
     public DbSet<Finance>? Finances { get; set; }
 

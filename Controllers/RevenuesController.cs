@@ -41,7 +41,8 @@ public class RevenuesController: ControllerBase {
 	
 	[HttpPut("{revenueId}")]
 	[TypeFilter(typeof(Revenue_ValidateRevenueIdFilterAttribute))]
-	[TypeFilter(typeof(Revenue_ValidateUpdateRevenueAttribute))]
+	[Revenue_ValidateReqBodyFilter]
+	[Revenue_ValidateUpdateRevenue]
 	public IActionResult UpdateRevenue(int financeId, int revenueId, [FromBody] Revenue revenue) {
 		var revenueToUpdate = (HttpContext.Items["revenue"] as IQueryable<Revenue>)?.First();
 
