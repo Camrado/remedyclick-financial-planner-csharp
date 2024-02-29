@@ -37,7 +37,7 @@ public class FinancesController: ControllerBase {
         _db.SaveChanges();
 
         return CreatedAtAction(nameof(GetFinanceById),
-            new { id = finance.FinanceId },
+            new { financeId = finance.FinanceId },
             finance);
     }
 

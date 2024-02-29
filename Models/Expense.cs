@@ -14,6 +14,7 @@ public class Expense {
     public string Description { get; set; }  = null!;
     
     [Required]
+    [Range(1, int.MaxValue, ErrorMessage = "The Amount field must be greater than 0.")]
     public decimal Amount { get; set; }
     
     // these two define the foreign key relationship to the Finances table

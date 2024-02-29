@@ -34,16 +34,11 @@ public class RevenuesController: ControllerBase {
 		_db.Revenues.Add(revenue);
 		_db.SaveChanges();
 
-		return Ok();
-		
-		// TODO: Fix this
-		// return CreatedAtAction(nameof(GetRevenueById),
-		// new { revenueId = revenue.RevenueId },
-		// revenue);
+		return CreatedAtAction(nameof(GetRevenueById),
+		new { revenueId = revenue.RevenueId, financeId = revenue.FinanceId },
+		revenue);
 	}
 	
-	// TODO: Check Put and Delete Requests
-
 	[HttpPut("{revenueId}")]
 	[TypeFilter(typeof(Revenue_ValidateRevenueIdFilterAttribute))]
 	[TypeFilter(typeof(Revenue_ValidateUpdateRevenueAttribute))]
