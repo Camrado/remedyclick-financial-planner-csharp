@@ -1,5 +1,4 @@
 ﻿using financial_planner.Data;
-using financial_planner.Data.Extensions;
 using financial_planner.Filters.ActionFilters;
 using financial_planner.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -30,8 +29,7 @@ public class RevenuesController: ControllerBase {
 	}
 
 	[HttpPost]
-	// TODO: Check this
-	// [Revenue_ValidateReqBodyFilter]
+	[Revenue_ValidateReqBodyFilter]
 	public IActionResult CreateRevenue(int financeId, [FromBody] Revenue revenue) {
 		_db.Revenues.Add(revenue);
 		_db.SaveChanges();
@@ -42,5 +40,32 @@ public class RevenuesController: ControllerBase {
 		// return CreatedAtAction(nameof(GetRevenueById),
 		// new { revenueId = revenue.RevenueId },
 		// revenue);
+	}
+	
+	// TODO: Check Put and Delete Requests
+
+	[HttpPut("{revenueId}")]
+	[TypeFilter(typeof(Revenue_ValidateRevenueIdFilterAttribute))]
+	[TypeFilter(typeof(Revenue_ValidateUpdateRevenueAttribute))]
+	public IActionResult UpdateRevenue(int financeId, int revenueId, [FromBody] Revenue revenue) {
+		var revenueToUpdate = (HttpContext.Items["revenue"] as IQueryable<Revenue>)?.First();
+
+		revenueToUpdate.Amount = revenue.Amount;
+		revenueToUpdate.Description = revenue.Description;
+
+		_db.SaveChanges();
+
+		return Ok(revenueToUpdate);
+	}
+	
+	[HttpDelete("{revenueId}")]
+	[TypeFilter(typeof(Revenue_ValidateRevenueIdFilterAttribute))]
+	public IActionResult DeleteRevenue(int financeId, int revenueId) {
+		var revenueToDelete = (HttpContext.Items["revenue"] as IQueryable<Revenue>)?.First();
+
+		_db.Revenues.Remove(revenueToDelete);
+		_db.SaveChanges();
+
+		return Ok(revenueToDelete);
 	}
 }
