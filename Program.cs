@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using financial_planner.Caching.CachePolicies;
 using financial_planner.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -31,6 +32,16 @@ builder.Services.AddApiVersioning(options => {
     options.AssumeDefaultVersionWhenUnspecified = true;
 });
 
+// Output Caching
+builder.Services.AddOutputCache(options => {
+    options.AddBasePolicy(cacheBuilder => {
+        cacheBuilder.Expire(TimeSpan.FromMinutes(10));
+    });
+    options.AddPolicy("CacheFinanceById", new ByIdCachePolicy("financeId"));
+    options.AddPolicy("CacheExpenseById", new ByIdCachePolicy("expenseId"));
+    options.AddPolicy("CacheRevenueById", new ByIdCachePolicy("revenueId"));
+});
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment()) {
@@ -41,6 +52,8 @@ if (app.Environment.IsDevelopment()) {
 }
 
 app.UseHttpsRedirection();
+
+app.UseOutputCache();
 
 app.MapControllers();
 
