@@ -4,6 +4,7 @@ using financial_planner.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,6 +43,10 @@ builder.Services.AddOutputCache(options => {
     options.AddPolicy("CacheRevenueById", new ByIdCachePolicy("revenueId"));
 });
 
+// Serilog
+builder.Host.UseSerilog((context, configuration) =>
+    configuration.ReadFrom.Configuration(context.Configuration));
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment()) {
@@ -50,6 +55,8 @@ if (app.Environment.IsDevelopment()) {
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "Financial Planner API v1");
     });
 }
+
+app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();
 
