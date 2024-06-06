@@ -40,7 +40,7 @@ public class RevenuesController: ControllerBase {
 		_db.Revenues.Add(revenue);
 		await _db.SaveChangesAsync();
 
-		await _cacheHelper.CleanRevenueCache(financeId);
+		await _cacheHelper.CleanRevenueCacheAsync(financeId);
 
 		return CreatedAtAction(nameof(GetRevenueById),
 		new { revenueId = revenue.RevenueId, financeId = revenue.FinanceId },
@@ -59,7 +59,7 @@ public class RevenuesController: ControllerBase {
 
 		await _db.SaveChangesAsync();
 
-		await _cacheHelper.CleanRevenueCache(financeId, revenueId);
+		await _cacheHelper.CleanRevenueCacheAsync(financeId, revenueId);
 		
 		return Ok(revenueToUpdate);
 	}
@@ -72,7 +72,7 @@ public class RevenuesController: ControllerBase {
 		_db.Revenues.Remove(revenueToDelete);
 		await _db.SaveChangesAsync();
 		
-		await _cacheHelper.CleanRevenueCache(financeId, revenueId);
+		await _cacheHelper.CleanRevenueCacheAsync(financeId, revenueId);
 
 		return Ok(revenueToDelete);
 	}

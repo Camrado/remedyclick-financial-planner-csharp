@@ -41,7 +41,7 @@ public class ExpensesController: ControllerBase {
         _db.Expenses.Add(expense);
         await _db.SaveChangesAsync();
 
-        await _cacheHelper.CleanExpenseCache(financeId);
+        await _cacheHelper.CleanExpenseCacheAsync(financeId);
 
         return CreatedAtAction(nameof(GetExpenseById),
             new { expenseId = expense.ExpenseId, financeId = expense.FinanceId },
@@ -61,7 +61,7 @@ public class ExpensesController: ControllerBase {
 
         await _db.SaveChangesAsync();
         
-        await _cacheHelper.CleanExpenseCache(financeId, expenseId);
+        await _cacheHelper.CleanExpenseCacheAsync(financeId, expenseId);
 
         return Ok(expenseToUpdate);
     }
@@ -74,7 +74,7 @@ public class ExpensesController: ControllerBase {
         _db.Expenses.Remove(expenseToDelete);
         await _db.SaveChangesAsync();
         
-        await _cacheHelper.CleanExpenseCache(financeId, expenseId);
+        await _cacheHelper.CleanExpenseCacheAsync(financeId, expenseId);
 
         return Ok(expenseToDelete);
     }

@@ -9,19 +9,19 @@ public class CacheHelper {
         _cache = cache;
     }
     
-    public async Task CleanFinanceCache() {
+    public async Task CleanFinanceCacheAsync() {
         // Cleaning cache for finances
         await _cache.EvictByTagAsync("tag-finances", default);
     }
     
-    public async Task CleanFinanceCache(int financeId) {
+    public async Task CleanFinanceCacheAsync(int financeId) {
         // Cleaning cache for finances
         await _cache.EvictByTagAsync("tag-finances", default);
         // Cleaning cache for tag -> 'finance-FINANCE_ID' 
         await _cache.EvictByTagAsync($"finance-{financeId}", default);
     }
 
-    public async Task CleanRevenueCache(int financeId) {
+    public async Task CleanRevenueCacheAsync(int financeId) {
         // Cleaning cache for revenues
         await _cache.EvictByTagAsync("tag-revenues", default);
         
@@ -31,7 +31,7 @@ public class CacheHelper {
         await _cache.EvictByTagAsync($"finance-{financeId}", default);
     }
     
-    public async Task CleanRevenueCache(int financeId, int revenueId) {
+    public async Task CleanRevenueCacheAsync(int financeId, int revenueId) {
         // Cleaning cache for revenues
         await _cache.EvictByTagAsync("tag-revenues", default);
         // Cleaning cache for tag -> 'revenue-REVENUE_ID'
@@ -43,7 +43,7 @@ public class CacheHelper {
         await _cache.EvictByTagAsync($"finance-{financeId}", default);
     }
     
-    public async Task CleanExpenseCache(int financeId) {
+    public async Task CleanExpenseCacheAsync(int financeId) {
         // Cleaning cache for expenses
         await _cache.EvictByTagAsync("tag-expenses", default);
         
@@ -53,7 +53,7 @@ public class CacheHelper {
         await _cache.EvictByTagAsync($"finance-{financeId}", default);
     }
     
-    public async Task CleanExpenseCache(int financeId, int expenseId) {
+    public async Task CleanExpenseCacheAsync(int financeId, int expenseId) {
         // Cleaning cache for expenses
         await _cache.EvictByTagAsync("tag-expenses", default);
         // Cleaning cache for tag -> 'expense-EXPENSE_ID'

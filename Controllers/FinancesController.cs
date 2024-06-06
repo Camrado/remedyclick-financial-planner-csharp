@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using financial_planner.Filters.ActionFilters;
 using financial_planner.Models;
 using Microsoft.AspNetCore.OutputCaching;
+using Microsoft.EntityFrameworkCore;
 
 namespace financial_planner.Controllers;
 
@@ -22,8 +23,9 @@ public class FinancesController: ControllerBase {
 
     [HttpGet]
     [OutputCache(Tags = ["tag-finances"])]
-    public IActionResult GetFinances() {
-        return Ok(_db.Finances.ProjectFinanceData());
+    public async Task<IActionResult> GetFinances() {
+        var finances = await _db.Finances.ProjectFinanceData().ToListAsync();
+        return Ok(finances);
     }
 
     [HttpGet("{financeId}")]
@@ -31,9 +33,10 @@ public class FinancesController: ControllerBase {
     [TypeFilter(typeof(Finance_ValidateFinanceIdFilterAttribute))]
     // TypeFilter instantiates TypeFilterAttribute - A filter that creates another filter of type ImplementationType,
     // retrieving missing constructor arguments from dependency injection if available there.
-    public IActionResult GetFinanceById(int financeId) {
-        var finance = HttpContext.Items["finance"] as IQueryable<Finance>;
-        return Ok(finance.ProjectFinanceData().First());
+    public async Task<IActionResult> GetFinanceById(int financeId) {
+        var finances = HttpContext.Items["finance"] as IQueryable<Finance>;
+        var finance = await finances.ProjectFinanceData().FirstAsync();
+        return Ok(finance);
     }
 
     [HttpPost]
@@ -42,7 +45,7 @@ public class FinancesController: ControllerBase {
         _db.Add(finance); 
         await _db.SaveChangesAsync();
 
-        await _cacheHelper.CleanFinanceCache();
+        await _cacheHelper.CleanFinanceCacheAsync();
         
         return CreatedAtAction(nameof(GetFinanceById),
             new { financeId = finance.FinanceId },
@@ -61,7 +64,7 @@ public class FinancesController: ControllerBase {
 
         await _db.SaveChangesAsync();
         
-        await _cacheHelper.CleanFinanceCache(financeId);
+        await _cacheHelper.CleanFinanceCacheAsync(financeId);
 
         return Ok(financeToUpdate);
     }
@@ -74,7 +77,7 @@ public class FinancesController: ControllerBase {
         _db.Finances.Remove(financeToDelete);
         await _db.SaveChangesAsync();
         
-        await _cacheHelper.CleanFinanceCache(financeId);
+        await _cacheHelper.CleanFinanceCacheAsync(financeId);
 
         return Ok(financeToDelete);
     }
